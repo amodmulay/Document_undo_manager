@@ -59,6 +59,8 @@ public class UndoManagerFactoryTest {
         Assert.assertTrue(undoManager.canRedo());
         undoManager.redo();
         undoManager.redo();
+        undoManager.undo();
+        undoManager.redo();
     }
 }
 
