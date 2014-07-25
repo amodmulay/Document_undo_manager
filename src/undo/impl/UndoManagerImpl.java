@@ -8,7 +8,8 @@ import undo.util.UndoAssert;
 import java.util.LinkedList;
 
 /**
- * Created with IntelliJ IDEA.
+ * Manages the change of state of a document associated with this object.
+ * <p/>
  * User: amodmulay
  * Date: 7/24/14
  * Time: 9:22 PM
@@ -19,13 +20,15 @@ public class UndoManagerImpl implements UndoManager {
     private final Document document;
     private final int changListBufferSize;
     private final LinkedList<Change> changeList;
-    private int undoLevel = 0;
+    private int undoLevel;
+    private boolean canRedo = false;
 
     public UndoManagerImpl(final Document doc, final int bufferSize) {
         UndoAssert.notNull(doc, "Document cannot be null");
         UndoAssert.notValid(bufferSize, "Buffer size cannot be zero");
         document = doc;
         changListBufferSize = bufferSize;
+        undoLevel = bufferSize;
         changeList = new LinkedList<Change>();
     }
 
@@ -47,7 +50,7 @@ public class UndoManagerImpl implements UndoManager {
 
     /**
      * If there is a new change registered then the change level is reset
-     * to the first value in the stack so that an undo action will result
+     * to the newest value on the stack so that an undo action will result
      * in the latest changes being undone
      */
     private void resetUndoLevel() {
@@ -68,32 +71,37 @@ public class UndoManagerImpl implements UndoManager {
             throw new IllegalStateException("Nothing to Undo");
 
         //0 is the last object in the stack
-        if (undoLevel == 0)
+        if (undoLevel == -1)
             throw new IllegalStateException("Reached end of Undo Buffer");
 
-
-        changeList.get(undoLevel).apply(document);
+        changeList.get(undoLevel).revert(document);
         /*
-        Id undo is called before a new change is registered then
+        If undo is called before a new change is registered then
         this will lead to the next change in the stack to be undone
          */
-        if (undoLevel > 0) {
-            undoLevel--;
-        }
+        undoLevel--;
+        canRedo = true;
     }
 
     @Override
     public boolean canRedo() {
-        //if undo level is more than the 0 then one undo is done and hence redo can be performed.
-        return (undoLevel > 0 && undoLevel < changListBufferSize);
+
+        return canRedo;
     }
 
     @Override
     public void redo() {
-        if (undoLevel == 0)
-            throw new IllegalStateException("nothing to redoo");
+        if (!canRedo())
+            throw new IllegalStateException("Nothing to Redo");
 
-        if (canUndo())
-            throw new IllegalStateException("Nothing to Undoa");
+        undoLevel++;
+        /*
+        If undoLevel is equal to the size of the stack then there is nothing
+        to redo. The undoLevel should be equal to stack size-1
+         */
+        if (undoLevel == changeList.size())
+            throw new IllegalStateException("Reached end of Redo Buffer");
+        changeList.get(undoLevel).apply(document);
+
     }
 }

@@ -1,7 +1,10 @@
 package test.undo;
 
+import org.junit.Assert;
 import org.junit.Test;
-import undo.UndoManagerFactory;
+import undo.*;
+import undo.impl.ChangeFactoryImpl;
+import undo.impl.DocumentImpl;
 import undo.impl.UndoManagerFactoryImpl;
 
 
@@ -17,6 +20,45 @@ public class UndoManagerFactoryTest {
     public void testCreateUndoManager() throws Exception {
 
         UndoManagerFactory undoManagerFactory = new UndoManagerFactoryImpl();
+        undoManagerFactory.createUndoManager(new DocumentImpl(), 1);
+    }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateUndoManagerNullDocument() throws Exception {
+
+        UndoManagerFactory undoManagerFactory = new UndoManagerFactoryImpl();
+        undoManagerFactory.createUndoManager(null, 1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateUndoManagerZeroBuffer() throws Exception {
+
+        UndoManagerFactory undoManagerFactory = new UndoManagerFactoryImpl();
+        undoManagerFactory.createUndoManager(new DocumentImpl(), 0);
+    }
+
+    @Test
+    public void testDocumentChange() throws Exception {
+        UndoManagerFactory undoManagerFactory = new UndoManagerFactoryImpl();
+        ChangeFactory changeFactory = new ChangeFactoryImpl();
+        Document document = new DocumentImpl();
+        UndoManager undoManager = undoManagerFactory.createUndoManager(document, 2);
+        Assert.assertFalse(undoManager.canUndo());
+        Assert.assertFalse(undoManager.canRedo());
+        Change change1 = changeFactory.createInsertion(1, "Test Change1", 0, 1);
+        change1.apply(document);
+        Change change2 = changeFactory.createInsertion(2, "Test Change2", 1, 2);
+        change2.apply(document);
+        undoManager.registerChange(change1);
+        undoManager.registerChange(change2);
+        Assert.assertTrue(undoManager.canUndo());
+        Assert.assertFalse(undoManager.canRedo());
+        undoManager.undo();
+        undoManager.undo();
+        Assert.assertTrue(undoManager.canRedo());
+        Assert.assertTrue(undoManager.canRedo());
+        undoManager.redo();
+        undoManager.redo();
     }
 }
+

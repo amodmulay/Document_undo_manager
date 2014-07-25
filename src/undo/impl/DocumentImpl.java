@@ -11,17 +11,17 @@ import undo.Document;
  */
 public class DocumentImpl implements Document {
     @Override
-    public void delete(int pos, String s) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void delete(final int pos, final String s) {
+        System.out.println("Deleting in document: " + s);
     }
 
     @Override
-    public void insert(int pos, String s) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void insert(final int pos, final String s) {
+        System.out.println("Inserting in document: " + s);
     }
 
     @Override
-    public void setDot(int pos) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void setDot(final int pos) {
+        System.out.println("Setting dot at: " + pos);
     }
 }

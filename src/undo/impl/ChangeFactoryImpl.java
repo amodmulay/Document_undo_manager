@@ -13,12 +13,12 @@ import undo.ChangeFactory;
  */
 public class ChangeFactoryImpl implements ChangeFactory {
     @Override
-    public Change createDeletion(int pos, String s, int oldDot, int newDot) {
-        return new DeletionChangeImpl();
+    public Change createDeletion(final int pos, final String s, final int oldDot, final int newDot) {
+        return new DeletionChangeImpl(pos, s, oldDot, newDot);
     }
 
     @Override
-    public Change createInsertion(int pos, String s, int oldDot, int newDot) {
-        return new InsertionChangeImpl();
+    public Change createInsertion(final int pos, final String s, final int oldDot, final int newDot) {
+        return new InsertionChangeImpl(pos, s, oldDot, newDot);
     }
 }

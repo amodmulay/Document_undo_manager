@@ -13,6 +13,19 @@ import undo.Document;
  */
 public class DeletionChangeImpl implements Change {
 
+    private final int pos;
+    private final String changeString;
+    private final int oldDot;
+    private final int newDot;
+
+
+    public DeletionChangeImpl(final int pos, final String s, final int oldDot, final int newDot) {
+        this.pos = pos;
+        this.changeString = s;
+        this.oldDot = oldDot;
+        this.newDot = newDot;
+    }
+
     @Override
     public String getType() {
         return ChangeType.DELETION_TYPE.getType();
@@ -20,11 +33,13 @@ public class DeletionChangeImpl implements Change {
 
     @Override
     public void apply(Document doc) {
-        //Apply changes to the document
+        doc.delete(pos, changeString);
+        doc.setDot(newDot);
     }
 
     @Override
     public void revert(Document doc) {
-        //revert changes to the document
+        doc.insert(pos, changeString);
+        doc.setDot(oldDot);
     }
 }
