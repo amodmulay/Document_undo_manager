@@ -40,4 +40,11 @@ public class InsertionChangeImpl implements Change {
         doc.delete(pos, changeString);
         doc.setDot(oldDot);
     }
+
+    @Override
+    public String toString() {
+        return "InsertionChangeImpl{" +
+                "changeString='" + changeString + '\'' +
+                '}';
+    }
 }

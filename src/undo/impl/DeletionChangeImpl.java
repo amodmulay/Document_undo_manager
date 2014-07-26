@@ -42,4 +42,11 @@ public class DeletionChangeImpl implements Change {
         doc.insert(pos, changeString);
         doc.setDot(oldDot);
     }
+
+    @Override
+    public String toString() {
+        return "DeletionChangeImpl{" +
+                "changeString='" + changeString + '\'' +
+                '}';
+    }
 }

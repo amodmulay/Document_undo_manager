@@ -49,17 +49,34 @@ public class UndoManagerFactoryTest {
         change1.apply(document);
         Change change2 = changeFactory.createInsertion(2, "Test Change2", 1, 2);
         change2.apply(document);
+
         undoManager.registerChange(change1);
         undoManager.registerChange(change2);
+
         Assert.assertTrue(undoManager.canUndo());
         Assert.assertFalse(undoManager.canRedo());
-        undoManager.undo();
+
+        System.out.println("Undoing and redoing starts here----------------------------------------------");
         undoManager.undo();
         Assert.assertTrue(undoManager.canRedo());
-        Assert.assertTrue(undoManager.canRedo());
-        undoManager.redo();
-        undoManager.redo();
         undoManager.undo();
+        undoManager.redo();
+        undoManager.redo();
+
+        System.out.println("Registering new change ------------------------------------------------------");
+        Change change3 = changeFactory.createInsertion(3, "Test Change3", 2, 3);
+        change3.apply(document);
+        undoManager.registerChange(change3);
+        Assert.assertTrue(undoManager.canUndo());
+
+        Assert.assertTrue(undoManager.canUndo());
+        Assert.assertFalse(undoManager.canRedo());
+
+        System.out.println("Undoing and redoing starts here----------------------------------------------");
+        undoManager.undo();
+        Assert.assertTrue(undoManager.canRedo());
+        undoManager.undo();
+        undoManager.redo();
         undoManager.redo();
     }
 }

@@ -42,7 +42,7 @@ public class UndoManagerImpl implements UndoManager {
         if (changeList.size() < changListBufferSize) {
             changeList.addFirst(change);
         } else {
-            changeList.removeLast();
+            System.out.println("Size exhausted. Removing last entry: " + changeList.removeLast().toString());
             changeList.addFirst(change);
         }
         resetUndoLevel();
@@ -54,7 +54,8 @@ public class UndoManagerImpl implements UndoManager {
      * in the latest changes being undone
      */
     private void resetUndoLevel() {
-        undoLevel = changeList.size() - 1;
+        undoLevel = 0;
+        canRedo = false;
     }
 
     @Override
@@ -70,8 +71,7 @@ public class UndoManagerImpl implements UndoManager {
         if (!canUndo())
             throw new IllegalStateException("Nothing to Undo");
 
-        //0 is the last object in the stack
-        if (undoLevel == -1)
+        if (undoLevel == changeList.size())
             throw new IllegalStateException("Reached end of Undo Buffer");
 
         changeList.get(undoLevel).revert(document);
@@ -79,13 +79,12 @@ public class UndoManagerImpl implements UndoManager {
         If undo is called before a new change is registered then
         this will lead to the next change in the stack to be undone
          */
-        undoLevel--;
+        undoLevel++;
         canRedo = true;
     }
 
     @Override
     public boolean canRedo() {
-
         return canRedo;
     }
 
@@ -94,12 +93,8 @@ public class UndoManagerImpl implements UndoManager {
         if (!canRedo())
             throw new IllegalStateException("Nothing to Redo");
 
-        undoLevel++;
-        /*
-        If undoLevel is equal to the size of the stack then there is nothing
-        to redo. The undoLevel should be equal to stack size-1
-         */
-        if (undoLevel == changeList.size())
+        undoLevel--;
+        if (undoLevel < 0)
             throw new IllegalStateException("Reached end of Redo Buffer");
         changeList.get(undoLevel).apply(document);
 
