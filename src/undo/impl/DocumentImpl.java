@@ -3,7 +3,6 @@ package undo.impl;
 import undo.Document;
 
 /**
- * Created with IntelliJ IDEA.
  * User: amodmulay
  * Date: 7/25/14
  * Time: 10:30 PM

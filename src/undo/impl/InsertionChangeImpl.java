@@ -5,7 +5,6 @@ import undo.ChangeType;
 import undo.Document;
 
 /**
- * Created with IntelliJ IDEA.
  * User: amodmulay
  * Date: 7/25/14
  * Time: 9:06 PM

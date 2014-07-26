@@ -5,8 +5,7 @@ import undo.UndoManager;
 import undo.UndoManagerFactory;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ${amodmulay}
+ * User: amodmulay
  * Date: 7/24/14
  * Time: 9:21 PM
  * To change this template use File | Settings | File Templates.

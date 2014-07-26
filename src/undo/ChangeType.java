@@ -1,7 +1,7 @@
 package undo;
 
 /**
- * Created with IntelliJ IDEA.
+ * Enum describing the change types for a given change
  * User: amodmulay
  * Date: 7/25/14
  * Time: 9:44 PM

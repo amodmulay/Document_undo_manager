@@ -9,13 +9,13 @@ import undo.impl.UndoManagerFactoryImpl;
 
 
 /**
- * Created with IntelliJ IDEA.
+ * JUnit Test Case to test the UndoManager functionality
  * User: amodmulay
  * Date: 7/25/14
  * Time: 10:29 PM
  * To change this template use File | Settings | File Templates.
  */
-public class UndoManagerFactoryTest {
+public class UndoManagerTest {
     @Test
     public void testCreateUndoManager() throws Exception {
 
